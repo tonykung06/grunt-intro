@@ -4,7 +4,7 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 		// pkg: grunt.file.readJSON('package.json'),
 		clean: {
-			build: ['./js/build']
+			build: ['./html/build/', './js/build/', './css/build/']
 		},
 		typescript: {
 			options: {
@@ -87,6 +87,30 @@ module.exports = function (grunt) {
 					extDot: 'last'
 				}]
 			}
+		},
+		less: {
+			dev: {
+				options: {
+					// cleancss: false, //seems not working
+					compress: true,
+					modifyVars: {
+						"test-var": "blue"
+					}
+				},
+				// files: {
+				// 	'css/build/test.css': 'css/test.less',
+				// 	'css/build/test2.css': 'css/test2.less',
+				// 	'css/build/bundle.css': ['css/test.less', 'css/test2.less']
+				// }
+				files: [{
+					expand: true,
+					cwd: 'css/',
+					src: ['*.less'],
+					dest: 'css/build/',
+					ext: '.css',
+					extDot: 'last'
+				}]
+			}
 		}
 	});
 
@@ -96,5 +120,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-tslint');
 	grunt.loadNpmTasks('grunt-htmlhint');
 	grunt.loadNpmTasks('grunt-contrib-htmlmin');
-	grunt.registerTask('default', ['clean', 'tslint', 'typescript', 'uglify', 'htmlhint', 'htmlmin']);
+	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.registerTask('default', ['clean', 'tslint', 'typescript', 'uglify', 'htmlhint', 'htmlmin', 'less']);
 };
