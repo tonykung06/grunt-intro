@@ -15,6 +15,14 @@ module.exports = function (grunt) {
 				dest: './js/build/bundle.js'
 			}
 		},
+		jshint: {
+			options: {
+				'-W015': true,
+				reporterOutput: 'jshint-report.txt',
+				ignores: ['*.min.js']
+			},
+			files: ['js/build/*.js']
+		},
 		uglify: {
 			options: {
 				beautify: false,
@@ -28,15 +36,15 @@ module.exports = function (grunt) {
 				files: [{
 					expand: true,
 					cwd: './js',
-					src: './build/**/*.js',
-					dest: './js/'									
+					src: './build/*.js',
+					dest: './js/'					
 				}],
 			},
 			production: {
 				files: [{
 					expand: true,
 					cwd: './js',
-					src: './build/**/*.js',
+					src: './build/*.js',
 					dest: './js/build/production',
 					flatten: true
 				}],
@@ -121,5 +129,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-htmlhint');
 	grunt.loadNpmTasks('grunt-contrib-htmlmin');
 	grunt.loadNpmTasks('grunt-contrib-less');
-	grunt.registerTask('default', ['clean', 'tslint', 'typescript', 'uglify', 'htmlhint', 'htmlmin', 'less']);
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.registerTask('default', ['clean', 'tslint', 'typescript', 'jshint', 'uglify', 'htmlhint', 'htmlmin', 'less']);
 };
