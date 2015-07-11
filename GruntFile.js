@@ -119,6 +119,42 @@ module.exports = function (grunt) {
 					extDot: 'last'
 				}]
 			}
+		},
+		csslint: {
+			strict123: {
+				options: {
+
+				},
+				src: ['css/build/**/*.css']
+			},
+			laxed123: {
+				options: {
+					csslintrc: 'lintrules.json'
+				},
+				src: ['css/build/**/*.css']
+			}
+		},
+		cssmin: {
+			// minTarget: {
+			// 	options: {
+			// 		"report": "gzip"
+			// 	},
+			// 	files: {
+			// 		'css/build/bundle.min.css': 'css/build/*.css'
+			// 	}
+			// }
+			minTarget2: {
+				files: [{
+					expand: true,
+					cwd: 'css/build/',
+					src: ['*.css', '!*.min.css'],
+					dest: 'css/build/',
+					ext: '.min.css',
+					extDot: 'last'
+				}, {
+					'css/build/bundle.min.css': 'css/build/*.css'
+				}]	
+			}
 		}
 	});
 
@@ -130,5 +166,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-htmlmin');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.registerTask('default', ['clean', 'tslint', 'typescript', 'jshint', 'uglify', 'htmlhint', 'htmlmin', 'less']);
+	grunt.loadNpmTasks('grunt-contrib-csslint');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.registerTask('default', ['clean', 'tslint', 'typescript', 'jshint', 'uglify', 'htmlhint', 'htmlmin', 'less', 'csslint', 'cssmin']);
 };
