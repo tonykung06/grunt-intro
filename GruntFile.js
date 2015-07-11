@@ -64,6 +64,29 @@ module.exports = function (grunt) {
 			github_page: {
 				src: ['html/github-home.html']
 			}
+		},
+		htmlmin: {
+			dev: {
+				options: {
+					removeEmptyAttributes: true,
+					removeEmptyElements: true,
+					removeRedundantAttributes: true,
+					removeComments: true,
+					removeOptionalTags: true,
+					collapseWhitespace: true
+				},
+				// files: {
+				// 	'html/github-home.min.html': ['html/github-home.html']
+				// }
+				files: [{
+					expand: true,
+					cwd: 'html/',
+					dest: 'html/build/',
+					src: ['*.html'],
+					ext: '.min.html',
+					extDot: 'last'
+				}]
+			}
 		}
 	});
 
@@ -72,5 +95,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-typescript');
 	grunt.loadNpmTasks('grunt-tslint');
 	grunt.loadNpmTasks('grunt-htmlhint');
-	grunt.registerTask('default', ['clean', 'tslint', 'typescript', 'uglify', 'htmlhint']);
+	grunt.loadNpmTasks('grunt-contrib-htmlmin');
+	grunt.registerTask('default', ['clean', 'tslint', 'typescript', 'uglify', 'htmlhint', 'htmlmin']);
 };
