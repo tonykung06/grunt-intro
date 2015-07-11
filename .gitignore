@@ -27,6 +27,6 @@ build/Release
 node_modules
 
 js/build
-#html/build
+html/build
 css/build
 jshint-report.txt
