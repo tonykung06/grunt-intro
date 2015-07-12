@@ -183,6 +183,8 @@ module.exports = function (grunt) {
     //alias task
     grunt.registerTask('default', ['clean', 'tslint', 'typescript', 'jshint', 'uglify', 'htmlhint', 'htmlmin', 'less', 'csslint', 'cssmin']);
 
+
+    //================= Inline tasks ======================
     //Function task
     //grunt foo:testing:123 gives foo, testing 123
     //grunt foo gives foo, no args
@@ -224,8 +226,12 @@ module.exports = function (grunt) {
       grunt.log.writeln(this.target + ': ' + this.data);
     });
 
-    //create a custom grunt plugin
+    //============== create a custom grunt plugin ======================
     //npm install -g grunt-init
     //git clone https://github.com/gruntjs/grunt-init-gruntplugin.git %USERPROFILE%/.grunt-init/<custom name>
     //grunt-init <custom name>
+    //...
+    //npm adduser
+    //npm publish
+    //npm unpublish <package name>@<version>
 };
