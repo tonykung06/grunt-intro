@@ -1,4 +1,5 @@
 'use strict';
+var fs = require('fs');
 
 module.exports = function (grunt) {
 	grunt.initConfig({
@@ -155,6 +156,16 @@ module.exports = function (grunt) {
 					'css/build/bundle.min.css': 'css/build/*.css'
 				}]	
 			}
+		},
+		log: {
+			foo: [1, 2, 3],
+			bar: 'hello world',
+			baz: false
+		},
+		checkFileSize: {
+			options: {
+				foldersToScan: ['./html/build/', './css/build/', './js/build/']
+			}
 		}
 	});
 
@@ -168,5 +179,53 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-csslint');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
+
+	//alias task
 	grunt.registerTask('default', ['clean', 'tslint', 'typescript', 'jshint', 'uglify', 'htmlhint', 'htmlmin', 'less', 'csslint', 'cssmin']);
+
+	//Function task
+	//grunt foo:testing:123 gives foo, testing 123
+	//grunt foo gives foo, no args
+	grunt.registerTask('foo', 'A sample task that logs stuff.', function(arg1, arg2) {
+	  if (arguments.length === 0) {
+	    grunt.log.writeln(this.name + ", no args");
+	  } else {
+	    grunt.log.writeln(this.name + ", " + arg1 + " " + arg2);
+	  }
+	});
+
+	grunt.registerTask('checkFileSize', 'Task to check file size', function(isDebug) {
+		var options = this.options({
+			foldersToScan: []
+		});
+
+		if (this.args.length !== 0 && isDebug !== undefined) {
+			grunt.log.writeflags(options, 'Custom Options');
+		}
+
+		options.foldersToScan.forEach(function (folderToScan){
+			grunt.log.writeln('Peeking %s', folderToScan);
+			grunt.file.recurse(folderToScan, function (absolutePath, rootDir, subDir, fileName){
+				var stats, asBytes;
+
+				if (grunt.file.isFile(absolutePath)) {
+					stats = fs.statSync(absolutePath);
+				 	asBytes = stats.size / 1024;
+					grunt.log.writeln('Found file %s with size of %s kb', fileName, asBytes);
+				}
+			});
+			grunt.log.writeln();
+		})
+	});
+
+	//multi-task
+	//grunt log will iterate over all the targets: foo, bar and baz
+	grunt.registerMultiTask('log', 'Log stuff.', function() {
+	  grunt.log.writeln(this.target + ': ' + this.data);
+	});
+
+	//create a custom grunt plugin
+	//npm install -g grunt-init
+	//git clone https://github.com/gruntjs/grunt-init-gruntplugin.git %USERPROFILE%/.grunt-init/<custom name>
+	//grunt-init <custom name>
 };
